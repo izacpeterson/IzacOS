@@ -1,5 +1,5 @@
 use std::fs;
-
+use std::os::unix::io::AsRawFd;
 use std::process::Command;
 
 fn main() {
@@ -40,15 +40,38 @@ fn main() {
         .args(["ifconfig", "eth0", "up"])
         .status()
         .ok();
+
     Command::new("/bin/busybox")
-        .args(["udhcpc", "-i", "eth0"])
+        .args(["udhcpc", "-i", "eth0", "-n", "-t", "3", "-T", "2"])
         .status()
         .ok();
 
-    println!("Welcome to izacos");
+    Command::new("/bin/busybox")
+        .args(["hostname", "izacos"])
+        .status()
+        .ok();
+
+    Command::new("/bin/busybox").args(["clear"]).status().ok();
+
+    let motd = fs::read_to_string("/etc/motd").expect("Failed to read file");
+    println!("{}", motd);
+
+    unsafe {
+        libc::setsid();
+        let tty = fs::OpenOptions::new()
+            .read(true)
+            .write(true)
+            .open("/dev/tty1")
+            .expect("Failed to open /dev/tty1");
+        let fd = tty.as_raw_fd();
+        libc::ioctl(fd, libc::TIOCSCTTY, 0);
+        libc::dup2(fd, 0);
+        libc::dup2(fd, 1);
+        libc::dup2(fd, 2);
+    }
 
     loop {
-        match Command::new("/bin/ash").spawn() {
+        match Command::new("/bin/zsh").env("TERM", "linux").spawn() {
             Ok(mut child) => match child.wait() {
                 Ok(status) => {
                     println!("shell exited with status: {}", status);

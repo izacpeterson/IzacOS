@@ -31,3 +31,5 @@ init/target/
 # ISO staging (generated)
 iso/boot/bzImage
 iso/boot/initramfs.cpio.gz
+
+data.img
