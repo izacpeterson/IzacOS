@@ -1,0 +1,6 @@
+pulls in deps. Kinda jank tbh
+
+ldd $(which bun) \
+  | awk '{for(i=1;i<=NF;i++) if ($i ~ /^\//) print $i}' \
+  | sort -u \
+  | xargs -I{} cp -v --parents {} rootfs

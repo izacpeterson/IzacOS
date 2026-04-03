@@ -1,0 +1,33 @@
+# Kernel build tree
+/linux-*/
+*.o
+*.ko
+*.a
+*.s
+*.d
+*.cmd
+*.order
+*.symvers
+*.mod
+*.mod.c
+Module.symvers
+modules.builtin
+modules.builtin.modinfo
+vmlinux
+vmlinux.32
+vmlinux.symvers
+System.map
+
+# Build artifacts
+initramfs.cpio.gz
+izacos.iso
+rootfs/init
+rootfs/lib64/
+rootfs/usr/
+
+# Rust build
+init/target/
+
+# ISO staging (generated)
+iso/boot/bzImage
+iso/boot/initramfs.cpio.gz
