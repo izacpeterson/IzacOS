@@ -6,11 +6,12 @@ build:
 pack: 
 	cd rootfs && find . | cpio -o -H newc | gzip > ../initramfs.cpio.gz
 
-boot: 
+boot:
 	qemu-system-x86_64 \
+		-nographic \
 		-kernel /home/izac/Dev/linux-6.12/arch/x86/boot/bzImage \
 		-initrd initramfs.cpio.gz \
-		-append "console=tty1 quiet" \
+		-append "console=ttyS0 quiet" \
 		-m 16G \
 		-enable-kvm \
 		-cpu host \

@@ -61,8 +61,8 @@ fn main() {
         let tty = fs::OpenOptions::new()
             .read(true)
             .write(true)
-            .open("/dev/tty1")
-            .expect("Failed to open /dev/tty1");
+            .open("/dev/console")
+            .expect("Failed to open /dev/console");
         let fd = tty.as_raw_fd();
         libc::ioctl(fd, libc::TIOCSCTTY, 0);
         libc::dup2(fd, 0);
