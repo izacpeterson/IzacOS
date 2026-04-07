@@ -1,0 +1,1 @@
+console.log("Running Bun Init Script")

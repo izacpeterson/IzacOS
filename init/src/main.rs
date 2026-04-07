@@ -6,7 +6,7 @@ fn main() {
     for cmd in [
         "ls", "cat", "cp", "mv", "rm", "mkdir", "chmod", "echo", "grep", "mount", "umount",
         "clear", "vi", "head", "tail", "wc", "sort", "find", "xargs", "wget", "env", "export",
-        "ps", "kill", "sleep", "uname", "id", "whoami", "sh", "ifconfig", "udhcpc", "route",
+        "ps", "kill", "sleep", "uname", "id", "whoami", "sh", "ifconfig", "udhcpc", "route", "df",
     ] {
         std::os::unix::fs::symlink("/bin/busybox", format!("/bin/{}", cmd)).ok();
     }
@@ -53,8 +53,12 @@ fn main() {
 
     Command::new("/bin/busybox").args(["clear"]).status().ok();
 
-    let motd = fs::read_to_string("/etc/motd").expect("Failed to read file");
-    println!("{}", motd);
+    Command::new("/bin/bun").args(["/etc/init.js"]).spawn().ok();
+
+    Command::new("/bin/bun")
+        .args(["/etc/motd.js"])
+        .status()
+        .ok();
 
     unsafe {
         libc::setsid();
